@@ -13,11 +13,11 @@ namespace Eauction_Buyer_API.DataAccess
         private readonly IRabbitMQCreator _rabbitMqCreator;
 
         public CosmosBuyerService(IBuyerRepository buyerRepository
-            //, IRabbitMQCreator rabbitMqCreator
+            , IRabbitMQCreator rabbitMqCreator
             )
         {
             _repository = buyerRepository;
-            //_rabbitMqCreator = rabbitMqCreator;
+            _rabbitMqCreator = rabbitMqCreator;
         }
 
         public async Task PlaceBid(BuyerInfo buyer)
@@ -40,7 +40,7 @@ namespace Eauction_Buyer_API.DataAccess
             buyer.Id = Guid.NewGuid().ToString();
 
             //Add message to RabbitMq
-            //_rabbitMqCreator.Publish(String.Format("New bid placed by {0} {1}", buyer.FirstName, buyer.LastName));
+            _rabbitMqCreator.Publish(String.Format("New bid placed by {0} {1}", buyer.FirstName, buyer.LastName));
 
             await _repository.PlaceBid(buyer);
         }

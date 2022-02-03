@@ -39,19 +39,20 @@ namespace Eauction_Buyer_API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EauctionBuyerAPI", Version = "v1" });
             });
 
-            //services.AddScoped<IRabbitMQCreator, RabbitMQCreator>();
+            services.AddScoped<IRabbitMQCreator, RabbitMQCreator>();
 
-            //services.AddSingleton(service => {
-            //    var _config = Configuration.GetSection("RabbitMQ");
-            //    return new ConnectionFactory()
-            //    {
-            //        HostName = _config["HostName"],
-            //        UserName = _config["UserName"],
-            //        Password = _config["Password"],
-            //        Port = Convert.ToInt32(_config["Port"]),
-            //        VirtualHost = _config["VirtualHost"],
-            //    };
-            //});
+            services.AddSingleton(service =>
+            {
+                var _config = Configuration.GetSection("RabbitMQ");
+                return new ConnectionFactory()
+                {
+                    HostName = _config["HostName"],
+                    UserName = _config["UserName"],
+                    Password = _config["Password"],
+                    Port = Convert.ToInt32(_config["Port"]),
+                    VirtualHost = _config["VirtualHost"],
+                };
+            });
 
             services.AddScoped<ICosmosBuyerService, CosmosBuyerService>();
             services.AddSingleton<IBuyerRepository>(InitializeCosmosClientIntance(Configuration.GetSection("Cosmos")).GetAwaiter().GetResult());
